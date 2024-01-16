@@ -1,0 +1,13 @@
+Code : ServoMo 	
+#include <Servo.h>
+const int potPin = A0;  // ขา Analog ที่เชื่อมตัวต้านทานปรับค่าได้ (Potentiometer)
+Servo myServo ;          // ตัวแปร Servo
+void setup() {
+  myServo.attach(9);    // ขา Digital ที่เชื่อม Servo Motor
+}
+void loop() {
+  int potValue = analogRead(potPin);     // อ่านค่าจากตัวต้านทานปรับค่าได้
+  int servoPosition = map(potValue, 0, 1023, 0, 180);  // แปลงค่าให้อยู่ในช่วง 0-180
+  myServo.write(servoPosition);          // กำหนดตำแหน่งของ Servo Motor
+  delay(15);  // รอเวลาเล็กน้อยเพื่อป้องกันการเคลื่อนที่มีความเร็วมากเกินไป
+}
