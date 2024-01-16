@@ -1,0 +1,26 @@
+#include <DHT.h>
+#define DHTPIN 2       // ขา Digital ที่เชื่อมกับ DHT22
+#define DHTTYPE DHT22  // รุ่นของ DHT (DHT22 หรือ DHT11)
+#define LED_PIN 6       // ขา Digital ที่เชื่อมกับ LED
+DHT dht(DHTPIN, DHTTYPE);
+void setup() {
+  Serial.begin(9600);
+  dht.begin();
+  pinMode(LED_PIN, OUTPUT);  // กำหนดขา LED_PIN เป็นขา Output
+}
+void loop() {
+  delay(2000);  // รอเวลา 2 วินาทีระหว่างการอ่านข้อมูล
+  float temperature = dht.readTemperature();
+  Serial.print("Temperature: ");
+  Serial.println(temperature);
+  if (temperature > 35.0) {
+    flashLED(7);  // กระพริบ LED 7 ครั้ง
+  } }
+void flashLED(int numFlashes) {
+  for (int i = 0; i < numFlashes; i++) {
+    digitalWrite(LED_PIN, HIGH);  // เปิด LED
+    delay(500);  // รอเวลา 500 มิลลิวินาที
+    digitalWrite(LED_PIN, LOW);   // ปิด LED
+    delay(500);  // รอเวลา 500 มิลลิวินาที
+  }
+}
