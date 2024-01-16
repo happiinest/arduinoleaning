@@ -1,0 +1,37 @@
+#define TRIGGER_PIN  9
+#define ECHO_PIN     10
+#define LED_PIN      13
+#define MAX_DISTANCE 10
+void setup() {
+  pinMode(TRIGGER_PIN, OUTPUT);
+  pinMode(ECHO_PIN, INPUT);
+  pinMode(LED_PIN, OUTPUT);
+  Serial.begin(9600);
+}
+void loop() {
+  // ส่งสัญญาณ trigger
+  digitalWrite(TRIGGER_PIN, LOW);
+  delayMicroseconds(2);
+  digitalWrite(TRIGGER_PIN, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(TRIGGER_PIN, LOW);
+  // รอให้ ECHO_PIN มีค่า HIGH
+  unsigned long pulseStartTime = micros();
+  while (digitalRead(ECHO_PIN) == LOW && micros() - pulseStartTime < 30000UL);
+  // วัดระยะเวลาที่ ECHO_PIN ค้างอยู่ที่ HIGH
+  unsigned long pulseStartTimeEcho = micros();
+  while (digitalRead(ECHO_PIN) == HIGH);
+
+  // คำนวณระยะห่าง
+  unsigned long pulseDuration = pulseStartTimeEcho - pulseStartTime;
+  float distance = pulseDuration / 58.0
+  if (distance < MAX_DISTANCE) {
+    digitalWrite(LED_PIN, HIGH);  // เปิด LED ถ้าระยะห่างน้อยกว่า 10 เซนติเมตร
+  } else {
+    digitalWrite(LED_PIN, LOW);   // ปิด LED ถ้าระยะห่างมากกว่าหรือเท่ากับ 10 เซนติเมตร
+  }
+  Serial.print("Distance: ");
+  Serial.print(distance);
+  Serial.println(" cm");
+  delay(1000);
+}
