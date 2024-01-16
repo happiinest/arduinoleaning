@@ -1,0 +1,22 @@
+ตัวอย่าง Code สำหรับการใช้งาน HC-SR04
+#define trig 9
+#define echo 10
+long duration;             // สำหรับเก็บค่าเวลาที่เสียงเดินทาง
+int distance;              // สำหรับเก็บค่าระยะทางที่คำนวณได้
+void setup() {
+  pinMode(trig, OUTPUT);     // กำหนดขา trig เป็น output
+  pinMode(echo, INPUT);   // กำหนดขา echo เป็น input
+  Serial.begin(9600);        // เริ่ม Serial เพื่อใช้ Serial Monitor
+}void loop() {
+  // เคลียร์ค่าขา trig ป้องกันกรณีสถานะค้างเก่าค้างอยู่
+  digitalWrite(trig, LOW);
+  delayMicroseconds(2);
+  // ให้ขา trig ส่งคลื่นออกไป 10 ไมโครวินาทีแล้วปิด (ตามสเปคการรับสัญญาณ)
+  digitalWrite(trig, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(trig, LOW);
+  duration = pulseIn(echo, HIGH);
+  distance = (duration*0.034)/2; // คำนวณหาระยะตามสูตรข้างต้น
+  Serial.print("Distance: "); // แสดงค่าทาง Serial Monitor
+  Serial.println(distance); 
+}
